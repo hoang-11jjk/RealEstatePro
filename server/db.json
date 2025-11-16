@@ -1,0 +1,72 @@
+{
+  "properties": [
+    {
+      "id": 1,
+      "title": "Căn hộ cao cấp Thủ Đức, view sông",
+      "price": 3200000000,
+      "location": "TP Thủ Đức, TP.HCM",
+      "type": "Căn hộ",
+      "status": "Bán",
+      "beds": 3,
+      "baths": 2,
+      "area": 96,
+      "image": "https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=1200&q=80",
+      "description": "Căn góc, ban công đón gió, đầy đủ tiện ích, gần tuyến Metro số 1 và trung tâm thương mại.",
+      "tags": ["Sổ hồng riêng", "Gần Metro", "Nội thất cao cấp"],
+      "contactName": "Ms. Hoa",
+      "contactPhone": "0901 234 567",
+      "postedAt": "Hôm nay"
+    },
+    {
+      "id": 2,
+      "title": "Nhà phố Quận 7, trung tâm Phú Mỹ Hưng",
+      "price": 7200000000,
+      "location": "Quận 7, TP.HCM",
+      "type": "Nhà phố",
+      "status": "Bán",
+      "beds": 4,
+      "baths": 4,
+      "area": 180,
+      "image": "https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=1200&q=80&sat=-20",
+      "description": "Mặt tiền đường 12m, gần trường quốc tế, thiết kế 1 trệt 3 lầu, sân thượng BBQ.",
+      "tags": ["Mặt tiền 12m", "Khu dân trí cao", "Gần trường quốc tế"],
+      "contactName": "Mr. Tuấn",
+      "contactPhone": "0909 888 222",
+      "postedAt": "2 ngày trước"
+    },
+    {
+      "id": 3,
+      "title": "Biệt thự nghỉ dưỡng ven biển Long Hải",
+      "price": 12500000000,
+      "location": "Long Hải, Bà Rịa - Vũng Tàu",
+      "type": "Biệt thự",
+      "status": "Cho thuê",
+      "beds": 5,
+      "baths": 5,
+      "area": 360,
+      "image": "https://images.unsplash.com/photo-1430285561322-7808604715df?auto=format&fit=crop&w=1200&q=80",
+      "description": "Khu compound, hồ bơi riêng, sân vườn 400m2, kế bên bãi tắm riêng, dịch vụ quản gia.",
+      "tags": ["Compound", "Hồ bơi riêng", "View biển"],
+      "contactName": "Ms. Linh",
+      "contactPhone": "0912 777 444",
+      "postedAt": "1 tuần trước"
+    },
+    {
+      "id": 4,
+      "title": "Đất nền thổ cư mặt tiền đường tỉnh",
+      "price": 2800000000,
+      "location": "Thuận An, Bình Dương",
+      "type": "Đất nền",
+      "status": "Bán",
+      "beds": 0,
+      "baths": 0,
+      "area": 120,
+      "image": "https://images.unsplash.com/photo-1484156818044-c040038b0710?auto=format&fit=crop&w=1200&q=80",
+      "description": "Thổ cư 100%, mặt tiền 8m, đã có điện nước, quy hoạch ổn định, xây dựng tự do.",
+      "tags": ["Thổ cư 100%", "Sổ sẵn", "Xây dựng tự do"],
+      "contactName": "Mr. Nam",
+      "contactPhone": "0902 111 999",
+      "postedAt": "Hôm qua"
+    }
+  ]
+}
