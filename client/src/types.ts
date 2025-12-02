@@ -33,4 +33,7 @@ export type ListingDraft = {
   description?: string
   contactName?: string
   contactPhone?: string
+  image?: string
+  ownerEmail?: string
+  ownerName?: string
 }

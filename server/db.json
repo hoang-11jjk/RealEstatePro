@@ -15,7 +15,10 @@
       "tags": ["Sổ hồng riêng", "Gần Metro", "Nội thất cao cấp"],
       "contactName": "Ms. Hoa",
       "contactPhone": "0901 234 567",
-      "postedAt": "Hôm nay"
+      "postedAt": "Hôm nay",
+      "ownerEmail": "hoa@example.com",
+      "ownerName": "Ms. Hoa",
+      "visibility": "approved"
     },
     {
       "id": 2,
@@ -32,7 +35,10 @@
       "tags": ["Mặt tiền 12m", "Khu dân trí cao", "Gần trường quốc tế"],
       "contactName": "Mr. Tuấn",
       "contactPhone": "0909 888 222",
-      "postedAt": "2 ngày trước"
+      "postedAt": "2 ngày trước",
+      "ownerEmail": "tuan@example.com",
+      "ownerName": "Mr. Tuấn",
+      "visibility": "approved"
     },
     {
       "id": 3,
@@ -49,7 +55,10 @@
       "tags": ["Compound", "Hồ bơi riêng", "View biển"],
       "contactName": "Ms. Linh",
       "contactPhone": "0912 777 444",
-      "postedAt": "1 tuần trước"
+      "postedAt": "1 tuần trước",
+      "ownerEmail": "linh@example.com",
+      "ownerName": "Ms. Linh",
+      "visibility": "approved"
     },
     {
       "id": 4,
@@ -66,7 +75,18 @@
       "tags": ["Thổ cư 100%", "Sổ sẵn", "Xây dựng tự do"],
       "contactName": "Mr. Nam",
       "contactPhone": "0902 111 999",
-      "postedAt": "Hôm qua"
+      "postedAt": "Hôm qua",
+      "ownerEmail": "nam@example.com",
+      "ownerName": "Mr. Nam",
+      "visibility": "approved"
+    }
+  ],
+  "users": [
+    {
+      "id": 1,
+      "fullName": "Admin",
+      "email": "admin@realestatepro.local",
+      "role": "admin"
     }
   ]
 }

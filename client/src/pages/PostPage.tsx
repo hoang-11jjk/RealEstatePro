@@ -5,7 +5,7 @@ function PostPage() {
   const user = useAppSelector((state) => state.auth.user)
 
   return (
-    <div className="space-y-4">
+    <div className="mx-auto max-w-4xl space-y-4">
       <div className="rounded-2xl bg-white p-6 shadow-md shadow-slate-900/5">
         <p className="text-xs uppercase tracking-[0.2em] text-cyan-600">Đăng tin nhà đất</p>
         <h2 className="text-2xl font-bold text-slate-900">Tạo tin đăng mới</h2>

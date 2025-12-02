@@ -11,7 +11,7 @@ type Props = {
 
 function SearchFilters({ filters, onChange, onClear, matchCount }: Props) {
   return (
-    <section id="search-section" className="rounded-2xl bg-white p-6 shadow-md shadow-slate-900/5">
+    <section id="search-section" className="animate-slide-in rounded-2xl bg-white p-6 shadow-md shadow-slate-900/5 transition-shadow duration-300 hover:shadow-xl">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <p className="text-xs uppercase tracking-[0.2em] text-cyan-600">Bộ lọc thông minh</p>
@@ -30,7 +30,7 @@ function SearchFilters({ filters, onChange, onClear, matchCount }: Props) {
             value={filters.keyword}
             onChange={(e) => onChange('keyword', e.target.value)}
             placeholder="VD: căn hộ, nhà phố..."
-            className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-100"
+            className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none transition-all duration-200 focus:border-cyan-500 focus:ring-2 focus:ring-cyan-100 hover:border-slate-300"
           />
         </div>
         <div className="space-y-1">
@@ -39,7 +39,7 @@ function SearchFilters({ filters, onChange, onClear, matchCount }: Props) {
             value={filters.location}
             onChange={(e) => onChange('location', e.target.value)}
             placeholder="Quận, huyện, thành phố..."
-            className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-100"
+            className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none transition-all duration-200 focus:border-cyan-500 focus:ring-2 focus:ring-cyan-100 hover:border-slate-300"
           />
         </div>
         <div className="space-y-1">
@@ -47,7 +47,7 @@ function SearchFilters({ filters, onChange, onClear, matchCount }: Props) {
           <select
             value={filters.type}
             onChange={(e) => onChange('type', e.target.value)}
-            className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-100"
+            className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none transition-all duration-200 focus:border-cyan-500 focus:ring-2 focus:ring-cyan-100 hover:border-slate-300 cursor-pointer"
           >
             <option value="">Tất cả</option>
             {propertyTypes.map((type) => (
@@ -62,7 +62,7 @@ function SearchFilters({ filters, onChange, onClear, matchCount }: Props) {
           <select
             value={filters.status}
             onChange={(e) => onChange('status', e.target.value)}
-            className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-100"
+            className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none transition-all duration-200 focus:border-cyan-500 focus:ring-2 focus:ring-cyan-100 hover:border-slate-300 cursor-pointer"
           >
             <option value="">Tất cả</option>
             {propertyStatuses.map((status) => (
@@ -101,7 +101,7 @@ function SearchFilters({ filters, onChange, onClear, matchCount }: Props) {
         <button
           type="button"
           onClick={onClear}
-          className="text-sm font-semibold text-cyan-700 underline underline-offset-4"
+          className="text-sm font-semibold text-cyan-700 underline underline-offset-4 transition-all duration-200 hover:text-cyan-800 hover:decoration-2"
         >
           Xóa bộ lọc
         </button>

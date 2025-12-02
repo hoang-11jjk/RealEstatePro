@@ -10,7 +10,7 @@ type Props = {
 
 function Hero({ featured, total, onSearchClick }: Props) {
   return (
-    <section className="rounded-2xl bg-gradient-to-br from-slate-900 via-slate-800 to-cyan-600 p-6 text-white shadow-xl shadow-slate-900/25">
+    <section className="animate-slide-in rounded-2xl bg-gradient-to-br from-slate-900 via-slate-800 to-cyan-600 p-6 text-white shadow-xl shadow-slate-900/25 transition-all duration-300 hover:shadow-2xl">{" "}
       <div className="grid gap-8 md:grid-cols-[1.3fr_1fr]">
         <div className="space-y-4">
           <p className="text-xs uppercase tracking-[0.2em] text-cyan-200">Website bất động sản</p>
@@ -25,28 +25,28 @@ function Hero({ featured, total, onSearchClick }: Props) {
             <button
               type="button"
               onClick={onSearchClick}
-              className="rounded-xl bg-white px-4 py-2 text-sm font-semibold text-slate-900 shadow-lg shadow-slate-900/25 transition hover:-translate-y-0.5 hover:shadow-xl"
+              className="group rounded-xl bg-white px-4 py-2 text-sm font-semibold text-slate-900 shadow-lg shadow-slate-900/25 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-cyan-500/30 active:translate-y-0"
             >
-              Bắt đầu tìm kiếm
+              <span className="inline-block transition-transform duration-300 group-hover:scale-105">Bắt đầu tìm kiếm</span>
             </button>
             <a
               href="#listings"
-              className="rounded-xl border border-white/30 px-4 py-2 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:border-white hover:bg-white/10"
+              className="group rounded-xl border border-white/30 px-4 py-2 text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-1 hover:border-white hover:bg-white/10 hover:shadow-lg active:translate-y-0"
             >
-              Xem tin đăng
+              <span className="inline-block transition-transform duration-300 group-hover:scale-105">Xem tin đăng</span>
             </a>
           </div>
           <div className="grid grid-cols-3 gap-3 text-sm">
-            <div className="rounded-xl bg-white/10 px-3 py-2">
-              <p className="text-lg font-black text-white">{total}+</p>
+            <div className="group rounded-xl bg-white/10 px-3 py-2 backdrop-blur-sm transition-all duration-300 hover:bg-white/20 hover:scale-105 hover:shadow-lg">
+              <p className="text-lg font-black text-white transition-transform duration-300 group-hover:scale-110">{total}+</p>
               <p className="text-slate-200">Tin đang hiển thị</p>
             </div>
-            <div className="rounded-xl bg-white/10 px-3 py-2">
-              <p className="text-lg font-black text-white">3 phút</p>
+            <div className="group rounded-xl bg-white/10 px-3 py-2 backdrop-blur-sm transition-all duration-300 hover:bg-white/20 hover:scale-105 hover:shadow-lg">
+              <p className="text-lg font-black text-white transition-transform duration-300 group-hover:scale-110">3 phút</p>
               <p className="text-slate-200">Để đăng tin mới</p>
             </div>
-            <div className="rounded-xl bg-white/10 px-3 py-2">
-              <p className="text-lg font-black text-white">24/7</p>
+            <div className="group rounded-xl bg-white/10 px-3 py-2 backdrop-blur-sm transition-all duration-300 hover:bg-white/20 hover:scale-105 hover:shadow-lg">
+              <p className="text-lg font-black text-white transition-transform duration-300 group-hover:scale-110">24/7</p>
               <p className="text-slate-200">Hỗ trợ khách hàng</p>
             </div>
           </div>
