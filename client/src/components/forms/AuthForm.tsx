@@ -17,15 +17,25 @@ function AuthForm({ redirectPath = '/' }: Props) {
     email: '',
     phone: '',
     password: '',
+    confirmPassword: '',
   })
+  const [passwordError, setPasswordError] = useState('')
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+    
+    if (mode === 'register' && form.password !== form.confirmPassword) {
+      setPasswordError('Mật khẩu không khớp')
+      return
+    }
+
     const name = mode === 'login' ? form.email.split('@')[0] || 'Người dùng' : form.fullName
     dispatch(login({ fullName: name, email: form.email }))
     dispatch(showToast(`${mode === 'login' ? 'Đăng nhập' : 'Đăng ký'} thành công. Chào mừng ${name}!`))
     navigate(redirectPath)
-    setForm({ fullName: '', email: '', phone: '', password: '' })
+    navigate(redirectPath)
+    setForm({ fullName: '', email: '', phone: '', password: '', confirmPassword: '' })
+    setPasswordError('')
   }
 
   return (
@@ -128,7 +138,14 @@ function AuthForm({ redirectPath = '/' }: Props) {
               required
               type="password"
               value={form.password}
-              onChange={(e) => setForm((prev) => ({ ...prev, password: e.target.value }))}
+              onChange={(e) => {
+                setForm((prev) => ({ ...prev, password: e.target.value }))
+                if (mode === 'register' && form.confirmPassword && e.target.value !== form.confirmPassword) {
+                  setPasswordError('Mật khẩu không khớp')
+                } else if (mode === 'register' && form.confirmPassword && e.target.value === form.confirmPassword) {
+                  setPasswordError('')
+                }
+              }}
               placeholder="••••••••"
               className="w-full rounded-xl border-2 border-slate-200 bg-white px-4 py-3 pl-11 text-sm outline-none transition-all duration-200 focus:border-cyan-500 focus:ring-4 focus:ring-cyan-100 hover:border-slate-300 placeholder:text-slate-400"
             />
@@ -136,8 +153,51 @@ function AuthForm({ redirectPath = '/' }: Props) {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
             </svg>
           </div>
+        </div>
+
+        {mode === 'register' && (
+          <div className="space-y-2">
+            <label className="text-sm font-bold text-slate-800 flex items-center gap-2">
+              <span className="text-purple-600">●</span> Nhập lại mật khẩu
+            </label>
+            <div className="relative">
+              <input
+                required
+                type="password"
+                value={form.confirmPassword}
+                onChange={(e) => {
+                  setForm((prev) => ({ ...prev, confirmPassword: e.target.value }))
+                  if (form.password && e.target.value !== form.password) {
+                    setPasswordError('Mật khẩu không khớp')
+                  } else {
+                    setPasswordError('')
+                  }
+                }}
+                placeholder="••••••••"
+                className={`w-full rounded-xl border-2 bg-white px-4 py-3 pl-11 text-sm outline-none transition-all duration-200 focus:ring-4 placeholder:text-slate-400 ${
+                  passwordError 
+                    ? 'border-red-300 focus:border-red-500 focus:ring-red-100' 
+                    : 'border-slate-200 focus:border-cyan-500 focus:ring-cyan-100 hover:border-slate-300'
+                }`}
+              />
+              <svg className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              </svg>
+            </div>
+            {passwordError && (
+              <p className="text-xs text-red-500 font-semibold flex items-center gap-1">
+                <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                {passwordError}
+              </p>
+            )}
+          </div>
+        )}
+
+        <div className="space-y-2 relative">
           {mode === 'login' && (
-            <button type="button" className="text-xs text-cyan-600 hover:text-cyan-700 font-semibold hover:underline transition-colors">
+            <button type="button" className="absolute right-0 top-0 text-xs text-cyan-600 hover:text-cyan-700 font-semibold hover:underline transition-colors">
               Quên mật khẩu?
             </button>
           )}

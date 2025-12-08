@@ -3,7 +3,9 @@ import { propertyStatuses, propertyTypes } from '../../data/properties'
 import type { ListingDraft, PropertyStatus, PropertyType } from '../../types'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import { createListing } from '../../store/listingsSlice'
+
 import { showToast } from '../../store/uiSlice'
+import { uploadToCloudinary } from '../../utils/cloudinary'
 
 const initialForm = {
   title: '',
@@ -24,40 +26,58 @@ function ListingForm() {
   const createStatus = useAppSelector((state) => state.listings.createStatus)
   const user = useAppSelector((state) => state.auth.user)
   const [form, setForm] = useState(initialForm)
+
   const [imagePreview, setImagePreview] = useState<string>('')
+  const [selectedFile, setSelectedFile] = useState<File | null>(null)
+  const [isUploading, setIsUploading] = useState(false)
   const fileRef = useRef<HTMLInputElement | null>(null)
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+    setIsUploading(true)
 
-    const payload: ListingDraft = {
-      title: form.title || 'Tin đăng mới',
-      price: Number(form.price) || 0,
-      location: form.location || 'Đang cập nhật',
-      type: form.type,
-      status: form.status,
-      beds: Number(form.beds) || 0,
-      baths: Number(form.baths) || 0,
-      area: Number(form.area) || 0,
-      description: form.description,
-      contactName: form.contactName,
-      contactPhone: form.contactPhone,
-      image: imagePreview || undefined,
-      ownerEmail: user?.email,
-      ownerName: user?.fullName,
+    try {
+      let imageUrl = imagePreview
+
+      if (selectedFile) {
+        try {
+          imageUrl = await uploadToCloudinary(selectedFile)
+        } catch (error) {
+          dispatch(showToast('Lỗi khi upload ảnh. Vui lòng thử lại.'))
+          setIsUploading(false)
+          return
+        }
+      }
+
+      const payload: ListingDraft = {
+        title: form.title || 'Tin đăng mới',
+        price: Number(form.price) || 0,
+        location: form.location || 'Đang cập nhật',
+        type: form.type,
+        status: form.status,
+        beds: Number(form.beds) || 0,
+        baths: Number(form.baths) || 0,
+        area: Number(form.area) || 0,
+        description: form.description,
+        contactName: form.contactName,
+        contactPhone: form.contactPhone,
+        image: imageUrl || undefined,
+        ownerEmail: user?.email,
+        ownerName: user?.fullName,
+      }
+
+      await dispatch(createListing(payload)).unwrap()
+      
+      dispatch(showToast('Đăng tin thành công! Tin của bạn đã xuất hiện trong danh sách.'))
+      setForm(initialForm)
+      setImagePreview('')
+      setSelectedFile(null)
+      if (fileRef.current) fileRef.current.value = ''
+    } catch (error) {
+      dispatch(showToast('Có lỗi khi đăng tin. Vui lòng thử lại.'))
+    } finally {
+      setIsUploading(false)
     }
-
-    dispatch(createListing(payload))
-      .unwrap()
-      .then(() => {
-        dispatch(showToast('Đăng tin thành công! Tin của bạn đã xuất hiện trong danh sách.'))
-        setForm(initialForm)
-        setImagePreview('')
-        if (fileRef.current) fileRef.current.value = ''
-      })
-      .catch(() => {
-        dispatch(showToast('Có lỗi khi đăng tin. Vui lòng thử lại.'))
-      })
   }
 
   return (
@@ -101,7 +121,12 @@ function ListingForm() {
             accept="image/*"
             onChange={(e) => {
               const file = e.target.files?.[0]
-              if (!file) return setImagePreview('')
+              if (!file) {
+                 setImagePreview('')
+                 setSelectedFile(null)
+                 return
+              }
+              setSelectedFile(file)
               const reader = new FileReader()
               reader.onload = () => setImagePreview(String(reader.result))
               reader.readAsDataURL(file)
@@ -260,17 +285,17 @@ function ListingForm() {
           </div>
           <button
             type="submit"
-            disabled={createStatus === 'loading'}
+            disabled={createStatus === 'loading' || isUploading}
             className="group relative w-full sm:w-auto overflow-hidden rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 px-8 py-3.5 text-sm font-bold text-white shadow-lg shadow-cyan-600/30 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-cyan-600/40 disabled:cursor-not-allowed disabled:opacity-70 disabled:hover:translate-y-0 active:translate-y-0"
           >
             <span className="relative z-10 flex items-center justify-center gap-2">
-              {createStatus === 'loading' ? (
+              {createStatus === 'loading' || isUploading ? (
                 <>
                   <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                   </svg>
-                  Đang đăng tin...
+                  {isUploading ? 'Đang tải ảnh...' : 'Đang đăng tin...'}
                 </>
               ) : (
                 <>
