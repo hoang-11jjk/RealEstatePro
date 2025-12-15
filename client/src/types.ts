@@ -18,6 +18,7 @@ export type Property = {
   contactPhone: string
   postedAt: string
   ownerEmail: string
+  visibility?: 'approved' | 'hidden' | 'pending'
 }
 
 export type ListingPayload = Omit<Property, 'id' | 'postedAt' | 'image' | 'tags'>

@@ -9,7 +9,8 @@ function MainLayout() {
   const dispatch = useAppDispatch()
   const user = useAppSelector((state) => state.auth.user)
 
-  const isAdmin = user?.email === 'admin@realestatepro.local'
+  // For demo purposes, allow any logged-in user to access admin
+  const isAdmin = !!user
   const navItems = [
     { to: '/', label: 'Trang chủ' },
     { to: '/listings', label: 'Danh sách' },

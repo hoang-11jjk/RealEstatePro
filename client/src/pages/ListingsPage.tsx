@@ -23,18 +23,18 @@ function ListingsPage() {
 
   const params = useMemo(() => {
     const p: Record<string, string> = {
-      page: String(page),
-      limit: '9',
+      _page: String(page),
+      _limit: '9',
       q: filters.keyword,
-      location: filters.location,
+      location_like: filters.location,
       type: filters.type,
       status: filters.status,
-      minPrice: filters.minPrice,
-      maxPrice: filters.maxPrice,
+      price_gte: filters.minPrice,
+      price_lte: filters.maxPrice,
       visibility: 'approved',
     }
     Object.keys(p).forEach((k) => {
-      if (p[k] === '' || p[k] === '0') delete p[k]
+      if (p[k] === '' || p[k] === '0' || p[k] === undefined) delete p[k]
     })
     return p
   }, [filters, page])
@@ -44,11 +44,17 @@ function ListingsPage() {
     setLoading(true)
     setError(null)
     api
-      .get<PagedResponse>('/properties', { params })
+      .get<Property[]>('/properties', { params })
       .then((res) => {
         if (!mounted) return
-        setData(res.data)
-        setSelectedId(res.data.items[0]?.id ?? null)
+        const total = Number(res.headers['x-total-count'] || res.data.length || 0)
+        setData({
+          items: res.data,
+          total,
+          page,
+          limit: 9
+        })
+        setSelectedId(res.data[0]?.id ?? null)
       })
       .catch((e) => setError(e.message || 'Không thể tải danh sách'))
       .finally(() => setLoading(false))

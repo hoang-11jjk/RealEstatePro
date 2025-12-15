@@ -13,10 +13,18 @@ function AdminPage() {
   const load = () => {
     setLoading(true)
     setError(null)
-    Promise.all([api.get<Property[]>('/properties'), api.get<Stat[]>('/stats/by-location')])
-      .then(([a, b]) => {
-        setItems(a.data)
-        setStats(b.data as any)
+    api.get<Property[]>('/properties')
+      .then((res) => {
+        setItems(res.data)
+        
+        // Calculate stats client-side
+        const statsMap = res.data.reduce((acc, p) => {
+          const key = p.location || 'Khác'
+          if (!acc[key]) acc[key] = { location: key, count: 0 }
+          if (p.visibility === 'approved' || !p.visibility) acc[key].count += 1
+          return acc
+        }, {} as Record<string, Stat>)
+        setStats(Object.values(statsMap))
       })
       .catch((e) => setError(e.message || 'Không thể tải'))
       .finally(() => setLoading(false))
@@ -27,7 +35,7 @@ function AdminPage() {
   }, [])
 
   const moderate = async (id: number, v: 'approved' | 'hidden' | 'pending') => {
-    await api.patch(`/properties/${id}/moderation`, { visibility: v })
+    await api.patch(`/properties/${id}`, { visibility: v })
     load()
   }
 

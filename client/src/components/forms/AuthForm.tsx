@@ -35,19 +35,34 @@ function AuthForm({ redirectPath = '/' }: Props) {
     setLoading(true)
     try {
       if (mode === 'login') {
-        const { data } = await api.post('/auth/login', {
-          email: form.email,
-          password: form.password,
+        const { data } = await api.get('/users', {
+          params: { email: form.email, password: form.password }
         })
-        dispatch(login(data))
-        dispatch(showToast(`Chào mừng trở lại, ${data.fullName}!`))
+        
+        if (Array.isArray(data) && data.length > 0) {
+          const user = data[0]
+          dispatch(login(user))
+          dispatch(showToast(`Chào mừng trở lại, ${user.fullName}!`))
+        } else {
+          throw new Error('Email hoặc mật khẩu không chính xác')
+        }
       } else {
-        const { data } = await api.post('/auth/register', {
+        // Check if email exists
+        const check = await api.get('/users', { params: { email: form.email } })
+        if (Array.isArray(check.data) && check.data.length > 0) {
+          throw new Error('Email này đã được đăng ký')
+        }
+
+        const newUser = {
           fullName: form.fullName,
           email: form.email,
           password: form.password,
           phone: form.phone,
-        })
+          role: 'user',
+          createdAt: new Date().toISOString()
+        }
+
+        const { data } = await api.post('/users', newUser)
         dispatch(login(data))
         dispatch(showToast(`Đăng ký thành công! Chào mừng ${data.fullName}`))
       }
@@ -55,7 +70,7 @@ function AuthForm({ redirectPath = '/' }: Props) {
       setForm({ fullName: '', email: '', phone: '', password: '', confirmPassword: '' })
       setPasswordError('')
     } catch (error: any) {
-      const message = error.response?.data?.message || 'Đã có lỗi xảy ra'
+      const message = error.message || error.response?.data?.message || 'Đã có lỗi xảy ra'
       dispatch(showToast(message))
     } finally {
       setLoading(false)

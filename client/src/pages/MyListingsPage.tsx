@@ -31,7 +31,7 @@ function MyListingsPage() {
   )
 
   const toggleVisibility = async (id: number, next: 'approved' | 'hidden') => {
-    await api.patch(`/properties/${id}/moderation`, { visibility: next })
+    await api.patch(`/properties/${id}`, { visibility: next })
     load()
   }
 
