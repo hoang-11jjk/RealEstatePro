@@ -184,6 +184,11 @@ app.get('/api/health', (_req, res) => {
   res.json({ status: 'ok' })
 })
 
+// Thêm đoạn này vào để trang chủ có nội dung nha Hoàng ơi
+app.get('/', (req, res) => {
+    res.send('<h1>Hello world! Server của Hoàng Mèo đã lên sóng! 🚀</h1>');
+});
+
 ensureDb().then(() => {
   app.listen(PORT, () => {
     console.log(`API server listening on http://localhost:${PORT}`)
