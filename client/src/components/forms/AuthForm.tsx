@@ -8,10 +8,13 @@ type Props = {
   redirectPath?: string
 }
 
+import { api } from '../../api'
+
 function AuthForm({ redirectPath = '/' }: Props) {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const mode = useAppSelector((state) => state.auth.mode)
+  const [loading, setLoading] = useState(false)
   const [form, setForm] = useState({
     fullName: '',
     email: '',
@@ -21,7 +24,7 @@ function AuthForm({ redirectPath = '/' }: Props) {
   })
   const [passwordError, setPasswordError] = useState('')
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     
     if (mode === 'register' && form.password !== form.confirmPassword) {
@@ -29,13 +32,34 @@ function AuthForm({ redirectPath = '/' }: Props) {
       return
     }
 
-    const name = mode === 'login' ? form.email.split('@')[0] || 'Người dùng' : form.fullName
-    dispatch(login({ fullName: name, email: form.email }))
-    dispatch(showToast(`${mode === 'login' ? 'Đăng nhập' : 'Đăng ký'} thành công. Chào mừng ${name}!`))
-    navigate(redirectPath)
-    navigate(redirectPath)
-    setForm({ fullName: '', email: '', phone: '', password: '', confirmPassword: '' })
-    setPasswordError('')
+    setLoading(true)
+    try {
+      if (mode === 'login') {
+        const { data } = await api.post('/auth/login', {
+          email: form.email,
+          password: form.password,
+        })
+        dispatch(login(data))
+        dispatch(showToast(`Chào mừng trở lại, ${data.fullName}!`))
+      } else {
+        const { data } = await api.post('/auth/register', {
+          fullName: form.fullName,
+          email: form.email,
+          password: form.password,
+          phone: form.phone,
+        })
+        dispatch(login(data))
+        dispatch(showToast(`Đăng ký thành công! Chào mừng ${data.fullName}`))
+      }
+      navigate(redirectPath)
+      setForm({ fullName: '', email: '', phone: '', password: '', confirmPassword: '' })
+      setPasswordError('')
+    } catch (error: any) {
+      const message = error.response?.data?.message || 'Đã có lỗi xảy ra'
+      dispatch(showToast(message))
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -223,10 +247,13 @@ function AuthForm({ redirectPath = '/' }: Props) {
 
         <button
           type="submit"
-          className="group relative w-full overflow-hidden rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 px-6 py-3.5 text-sm font-bold text-white shadow-lg shadow-cyan-600/30 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-cyan-600/40 active:translate-y-0"
+          disabled={loading}
+          className="group relative w-full overflow-hidden rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 px-6 py-3.5 text-sm font-bold text-white shadow-lg shadow-cyan-600/30 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-cyan-600/40 active:translate-y-0 disabled:opacity-70 disabled:cursor-not-allowed"
         >
           <span className="relative z-10 flex items-center justify-center gap-2">
-            {mode === 'login' ? (
+            {loading ? (
+              <span>Đang xử lý...</span>
+            ) : mode === 'login' ? (
               <>
                 Đăng nhập ngay
                 <svg className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">

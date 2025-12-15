@@ -26,8 +26,11 @@ async function ensureDb() {
   const db = await readDb()
   if (!db.properties || !Array.isArray(db.properties)) {
     db.properties = []
-    await writeDb(db)
   }
+  if (!db.users || !Array.isArray(db.users)) {
+    db.users = []
+  }
+  await writeDb(db)
 }
 
 const app = express()
@@ -182,6 +185,56 @@ app.get('/api/stats/by-location', async (_req, res) => {
 
 app.get('/api/health', (_req, res) => {
   res.json({ status: 'ok' })
+})
+
+// Authentication Endpoints
+app.post('/auth/register', async (req, res) => {
+  const { fullName, email, password, phone } = req.body || {}
+  
+  if (!fullName || !email || !password) {
+    return res.status(400).json({ message: 'Vui lòng điền đầy đủ thông tin' })
+  }
+
+  const db = await readDb()
+  const users = db.users || []
+
+  if (users.find(u => u.email === email)) {
+    return res.status(400).json({ message: 'Email này đã được đăng ký' })
+  }
+
+  const newUser = {
+    id: Date.now(),
+    fullName,
+    email,
+    password, // Note: In production, hash this!
+    phone,
+    role: 'user',
+    createdAt: new Date().toISOString()
+  }
+
+  db.users = [...users, newUser]
+  await writeDb(db)
+
+  const { password: _, ...userWithoutPassword } = newUser
+  res.status(201).json(userWithoutPassword)
+})
+
+app.post('/auth/login', async (req, res) => {
+  const { email, password } = req.body || {}
+  
+  if (!email || !password) {
+    return res.status(400).json({ message: 'Vui lòng nhập email và mật khẩu' })
+  }
+
+  const db = await readDb()
+  const user = (db.users || []).find(u => u.email === email && u.password === password)
+
+  if (!user) {
+    return res.status(401).json({ message: 'Email hoặc mật khẩu không chính xác' })
+  }
+
+  const { password: _, ...userWithoutPassword } = user
+  res.json(userWithoutPassword)
 })
 
 // Thêm đoạn này vào để trang chủ có nội dung nha Hoàng ơi
