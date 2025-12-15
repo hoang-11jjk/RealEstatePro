@@ -1,6 +1,5 @@
 import { LogOut, ShieldHalf } from 'lucide-react'
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom'
-import Toast from '../Toast'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import { logout } from '../../store/authSlice'
 
@@ -88,7 +87,7 @@ function MainLayout() {
         </div>
       </footer>
 
-      <Toast />
+
     </div>
   )
 }
