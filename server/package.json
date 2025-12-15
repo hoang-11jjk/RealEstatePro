@@ -4,8 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "node --watch index.js",
-    "start": "node index.js"
+    "dev": "json-server --watch db.json --port 3000",
+    "start": "node ./node_modules/json-server/lib/cli/bin.js --watch db.json --host 0.0.0.0 --port $PORT"
   },
   "dependencies": {
     "cors": "^2.8.5",
