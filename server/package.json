@@ -4,13 +4,17 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "json-server --watch db.json --port 3000",
-    "start": "node ./node_modules/json-server/lib/cli/bin.js --watch db.json --host 0.0.0.0 --port $PORT"
+    "dev": "node index.js",
+    "dev:json": "json-server --watch db.json --port 3000",
+    "start": "node index.js",
+    "init-db": "node initDb.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
+    "dotenv": "^17.3.1",
     "express": "^5.2.1",
-    "json-server": "^0.17.4"
+    "json-server": "^0.17.4",
+    "mysql2": "^3.19.0"
   },
   "engines": {
     "node": ">=18"
